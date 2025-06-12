@@ -1,0 +1,100 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+
+// Mapping of English characters to Morse code
+std::unordered_map<char, std::string> englishToMorse = {
+    {'A', ".-"}, {'B', "-..."}, {'C', "-.-."}, {'D', "-.."}, {'E', "."},
+    {'F', "..-."}, {'G', "--."}, {'H', "...."}, {'I', ".."}, {'J', ".---"},
+    {'K', "-.-"}, {'L', ".-.."}, {'M', "--"}, {'N', "-."}, {'O', "---"},
+    {'P', ".--."}, {'Q', "--.-"}, {'R', ".-."}, {'S', "..."}, {'T', "-"},
+    {'U', "..-"}, {'V', "...-"}, {'W', ".--"}, {'X', "-..-"}, {'Y', "-.--"},
+    {'Z', "--.."},
+    {'0', "-----"}, {'1', ".----"}, {'2', "..---"}, {'3', "...--"}, {'4', "....-"},
+    {'5', "....."}, {'6', "-...."}, {'7', "--..."}, {'8', "---.."}, {'9', "----."},
+    {' ', "/"}
+};
+
+// Mapping of Morse code to English characters
+std::unordered_map<std::string, char> morseToEnglish;
+
+void initializeMorseToEnglish() {
+    for (const auto& pair : englishToMorse) {
+        morseToEnglish[pair.second] = pair.first;
+    }
+}
+
+std::string textToMorse(const std::string& text) {
+    std::string morseCode;
+    for (char c : text) {
+        char upperC = toupper(c);
+        if (englishToMorse.find(upperC) != englishToMorse.end()) {
+            morseCode += englishToMorse[upperC] + " ";
+        }
+    }
+    return morseCode;
+}
+
+std::string morseToText(const std::string& morseCode) {
+    std::string text;
+    std::string morseChar;
+    for (char c : morseCode) {
+        if (c == ' ') {
+            if (!morseChar.empty()) {
+                if (morseToEnglish.find(morseChar) != morseToEnglish.end()) {
+                    text += morseToEnglish[morseChar];
+                }
+                morseChar.clear();
+            }
+        } else {
+            morseChar += c;
+        }
+        if (c == '/') {
+            text += ' ';
+        }
+    }
+    // Handle the last Morse code character
+    if (!morseChar.empty()) {
+        if (morseToEnglish.find(morseChar) != morseToEnglish.end()) {
+            text += morseToEnglish[morseChar];
+        }
+    }
+    return text;
+}
+
+int main() {
+    initializeMorseToEnglish();
+
+    while (true) {
+        std::cout << "1. Text to Morse Code\n";
+        std::cout << "2. Morse Code to Text\n";
+        std::cout << "3. Exit\n";
+        std::cout << "Choose an option: ";
+        int option;
+        std::cin >> option;
+        std::cin.ignore(); // Ignore newline character
+
+        switch (option) {
+            case 1: {
+                std::cout << "Enter text: ";
+                std::string text;
+                std::getline(std::cin, text);
+                std::cout << "Morse Code: " << textToMorse(text) << std::endl;
+                break;
+            }
+            case 2: {
+                std::cout << "Enter Morse code: ";
+                std::string morseCode;
+                std::getline(std::cin, morseCode);
+                std::cout << "Text: " << morseToText(morseCode) << std::endl;
+                break;
+            }
+            case 3:
+                return 0;
+            default:
+                std::cout << "Invalid option. Please choose again." << std::endl;
+        }
+    }
+
+    return 0;
+}
