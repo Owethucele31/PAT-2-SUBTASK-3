@@ -1,0 +1,40 @@
+#include <iostream>
+using namespace std;
+
+// Constants for number of experiments and readings
+const int NUM_EXPERIMENTS = 4;
+const int NUM_READINGS = 3;
+
+int main() {
+    int i, j; // Loop counters
+    double readingValue, total, average; // Variables for reading value, total, and average
+
+    // Loop through each experiment
+    for (i = 1; i <= NUM_EXPERIMENTS; i++) {
+        cout << "EXPERIMENT " << i << endl;
+        cout << "=========" << endl;
+        total = 0; // Initialize total for each experiment
+
+        // Loop through each reading in the experiment
+        for (j = 1; j <= NUM_READINGS; j++) {
+            cout << "Enter reading " << j << " value: ";
+            cin >> readingValue;
+            total += readingValue; // Accumulate total
+        }
+
+        average = total / NUM_READINGS; // Calculate average
+
+        // Display the average and its range
+        cout << "Experiment " << i << " average: " << average;
+
+        if (average < 100) {
+            cout << " is below acceptable range" << endl;
+        } else if (average >= 100 && average <= 300) {
+            cout << " is within acceptable range" << endl;
+        } else {
+            cout << " is above acceptable range" << endl;
+        }
+    }
+
+    return 0;
+}
